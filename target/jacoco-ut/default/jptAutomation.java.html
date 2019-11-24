@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>jptAutomation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">jptAutomation</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">jptAutomation.java</span></div><h1>jptAutomation.java</h1><pre class="source lang-java linenums">import org.springframework.boot.*;
+import org.springframework.boot.autoconfigure.*;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@EnableAutoConfiguration
+<span class="fc" id="L7">public class jptAutomation {</span>
+
+	@RequestMapping(&quot;/&quot;)
+	String home() {
+<span class="fc" id="L11">		return &quot;Welcome to JPT Release version generator..&quot;;</span>
+	}
+
+	//IAE-0
+	@RequestMapping(value = &quot;/rel&quot;, method = RequestMethod.GET)
+	@ResponseBody
+	String getRel(long nAppId) {
+		//updated a new release version
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">		if(nAppId == 1) //Web</span>
+<span class="nc" id="L20">			return getWebRelVersion()+&quot;.&quot;+getBuildVersion();</span>
+<span class="pc bpc" id="L21" title="1 of 2 branches missed.">		if(nAppId == 2) //API</span>
+<span class="nc" id="L22">			return getAPIRelVersion()+&quot;.&quot;+getBuildVersion();</span>
+		
+<span class="fc" id="L24">		return getRelVersion()+&quot;.&quot;+getBuildVersion();	</span>
+	}
+
+	String getWebRelVersion() {
+		//updated a new build version
+<span class="nc" id="L29">		return &quot;01&quot;;</span>
+	}
+
+	String getAPIRelVersion() {
+		//updated a new build version
+<span class="nc" id="L34">		return &quot;02&quot;;</span>
+	}
+
+	//IAE-1
+	@RequestMapping(value = &quot;/rel/version&quot;, method = RequestMethod.GET)
+	@ResponseBody
+	String getRelVersion() {
+		//updated a new release version
+<span class="fc" id="L42">		return &quot;16&quot;;</span>
+	}
+
+	//IAE-2
+	@RequestMapping(value = &quot;/rel/build&quot;, method = RequestMethod.GET)
+	@ResponseBody
+	String getBuildVersion() {
+		//updated a new build version
+<span class="fc" id="L50">		return &quot;05&quot;;</span>
+	}
+
+	//IAE-3
+	@RequestMapping(value = &quot;/rel/patch&quot;, method = RequestMethod.GET)
+	@ResponseBody
+	String getPatchVersion() {
+		//updated a new patch version
+<span class="fc" id="L58">		return &quot;08&quot;;</span>
+	}
+
+	//IAE-3
+	@RequestMapping(value = &quot;/rel/team&quot;, method = RequestMethod.GET)
+	@ResponseBody
+	String getTeamName(int nTeamId) {
+		//updated a new patch version
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">		if(nTeamId == 1)</span>
+<span class="nc" id="L67">			return &quot;IT&quot;;</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">		if(nTeamId == 2)</span>
+<span class="fc" id="L69">			return &quot;MGMT&quot;;</span>
+<span class="fc" id="L70">		return &quot;SUPPORT&quot;;</span>
+	}
+
+	@RequestMapping(value = &quot;/rel/colorteam&quot;, method = RequestMethod.GET)
+	@ResponseBody
+	String getColorTeamName(int nTeamId) {
+		//updated a new patch version
+<span class="nc bnc" id="L77" title="All 2 branches missed.">		if(nTeamId == 1)</span>
+<span class="nc" id="L78">			return &quot;Copper&quot;;</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">		if(nTeamId == 2)</span>
+<span class="nc" id="L80">			return &quot;Black&quot;;</span>
+<span class="nc" id="L81">		return &quot;Blue&quot;;</span>
+	}
+
+	public static void main(String[] args) throws Exception {
+<span class="nc" id="L85">		SpringApplication.run(jptAutomation.class, args);</span>
+<span class="nc" id="L86">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -13,6 +13,8 @@ node {
             dockerImage = ''
         }
 
+if (env.BRANCH_NAME == 'develop'|| env.BRANCH_NAME == 'release' || env.BRANCH_NAME == 'dev')
+{
        //Step #1. checkout the files
         stage ("Code checkout")  {
                 checkout scm
@@ -21,168 +23,168 @@ node {
                 // git 'https://github.com/OctoDevOps/codelab.git'
                  }
 //        dir('SpringLab') {
-                def mvnHome = tool 'M3'
-                def targetVersion = "${env.BUILD_NUMBER}" //getDevVersion()
+        def mvnHome = tool 'M3'
+        def targetVersion = "${env.BUILD_NUMBER}" //getDevVersion()
 
-                sh "/usr/local/bin/docker kill  dkautomation || true"
-                sh "/usr/local/bin/docker rm -f  dkautomation || true"
-                sh "/usr/local/bin/docker rmi  dkautomation || true"
-                sh "/usr/local/bin/docker system prune || true"
+        sh "/usr/local/bin/docker kill  dkautomation || true"
+        sh "/usr/local/bin/docker rm -f  dkautomation || true"
+        sh "/usr/local/bin/docker rmi  dkautomation || true"
+        sh "/usr/local/bin/docker system prune || true"
 
-                // timeout(5) {
-                //     waitUntil {
-                //         script {
-                //             def result = sh script: '/usr/local/bin/docker ps -f "name=dkautomation" --format "{{.ID}}"'
-                //             print result
-                //             return result == null;
-                //         }
-                //     }
-                // }
+        // timeout(5) {
+        //     waitUntil {
+        //         script {
+        //             def result = sh script: '/usr/local/bin/docker ps -f "name=dkautomation" --format "{{.ID}}"'
+        //             print result
+        //             return result == null;
+        //         }
+        //     }
+        // }
 
-                //Step #2. Build with unit testing
-                stage("Build with Unit Testing ")
-                {
-                            print 'target build version...'
-                            print targetVersion
-                            withSonarQubeEnv('localhost_sonarqube') {
-                                sh "pwd;'${mvnHome}/bin/mvn' -Dintegration-tests.skip=true -Dbuild.number=${targetVersion} clean compile test sonar:sonar"
-                            }
-                        }
-
-                    // No need to occupy a node
-                    stage("Quality Gate"){
-                        withSonarQubeEnv('localhost_sonarqube') {
-                            timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
-                                def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
-                                if (qg.status != 'OK') {
-                                error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                                }
-                                else{
-                                    sh "pwd;'${mvnHome}/bin/mvn' -Dintegration-tests.skip=true -Dbuild.number=${targetVersion} package"
-                                    pom = readMavenPom file: 'pom.xml'
-                                    // get the current development version
-                                    developmentArtifactVersion = "${pom.version}-${targetVersion}"
-                                    print 'Build Artifact version:'
-                                    print developmentArtifactVersion
-                                    // execute the unit testing and collect the reports
-                                    //junit '**//*target/unit-testing-reports/TEST-*.xml'
-                                    archiveArtifacts 'target*//*.jar'
-                                }
-                            }
-                        }
+        //Step #2. Build with unit testing
+        stage("Build with Unit Testing ")
+        {
+                    print 'target build version...'
+                    print targetVersion
+                    withSonarQubeEnv('localhost_sonarqube') {
+                        sh "pwd;'${mvnHome}/bin/mvn' -Dintegration-tests.skip=true -Dbuild.number=${targetVersion} clean compile test sonar:sonar"
                     }
-
-                    // stage("Publishing Unit Testing Metris to Confluence")
-                    // {
-                    //     withSonarQubeEnv('localhost_sonarqube') {
-                            
-                    //     }
-
-                    // }
-
-
-                stage("Stop, Deploy and Restart"){
-                    echo "Build package is ready to deploy"
-                    // shutdown
-                    //sh 'curl -X POST http://localhost:9090/shutdown || true'
-                    // copy file to target location, and start the application
-                // sh 'cp target/*.jar /Users/dineshganesan/codelab/buildrun/;' --gd
-                //withEnv(['JENKINS_NODE_COOKIE=dontkill']) {
-                //     sh 'nohup java -Dserver.port=9090 -jar /Users/dineshganesan/codelab/buildrun/*.jar &'
-                //}
-                   // sh "'${mvnHome}/bin/mvn' package"
-                    //dockerImage = sh "/usr/local/bin/docker build -t imgautomation ." -- gd
-                    dockerImage = docker.build('services/imgautomation')
-                    sh "/usr/local/bin/docker run --name dkautomation -d -p 9090:8080 services/imgautomation"
-
-                    echo "Successfully launched the app"
-                    // wait for application to respond
-                    //sh 'while ! httping -qc1 http://localhost:8081 ; do sleep 1 ; done'
-                    }
-
-                stage("Push Image to Repo "){
-                    echo "Publishing docker image to docker registry repo"
-                    // associateTag nexusInstanceId: 'iae_artifact_repo', search: [[key: 'name', value: 'iae_artifact_repo']], tagName: 'iae_automation_snapshot'
-                    // archiveArtifacts allowEmptyArchive: true, artifacts: 'imgautomation', onlyIfSuccessful: true
-
-                    // withDockerRegistry([credentialsId: 'docker-registry-credentials', url: "http://localhost:8081/"]) {
-                    // // we give the image the same version as the .war package
-                    // dockerImage.push()
-
-                        docker.withRegistry('http://localhost:8090', 'nexus_access_id') {
-                            dockerImage.push('snapshot')
-                        }
-
-                        def userInput = true
-                        def didTimeout = false
-                        try {
-                            timeout(time: 60, unit: 'SECONDS') { // change to a convenient timeout for you
-                                userInput = input(
-                                ok:'Yes', message: 'Please confirm if you are satisfied with the QA results', parameters: [
-                                [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Certified']
-                                ])
-                            }
-                        } catch(err) { // timeout reached or input false
-                            def user = err.getCauses()[0].getUser()
-                            if('SYSTEM' == user.toString()) { // SYSTEM means timeout.
-                                didTimeout = true
-                            } else {
-                                userInput = false
-                                echo "Aborted by: [${user}]"
-                            }
-                        }
-
-                        node {
-                            if (didTimeout) {
-                                // do something on timeout
-                                echo "no input was received before timeout"
-                            } else if (userInput == true) {
-                                // do something
-                                echo "Admin has approved the build and it's ready to release now"
-                                docker.withRegistry('http://localhost:8091', 'nexus_access_id') {
-
-                                    stage ('Label RC'){
-                                        // sh 'docker run -d -p 8080:8080 -t safe/gs-spring-boot-docker --name safe-ws'
-                                        // app.push("${shortCommit}")
-                                        dockerImage.push('release')
-                                    }
-
-                                    stage ('Deploy and Launch RC'){
-
-                                        sh "/usr/local/bin/docker kill  imgautomation_rc || true"
-                                        sh "/usr/local/bin/docker rm  imgautomation_rc || true"
-                                        timeout(5) {
-                                            waitUntil {
-                                                script {
-                                                    def result = sh script: '/usr/local/bin/docker ps -f "name=imgautomation_rc" --format "{{.ID}}"'
-                                                    print result
-                                                    return result == null;
-                                                }
-                                            }
-                                        }
-
-                                        docker.image("localhost:8091/services/imgautomation:release").run('-p 9091:8080 -h 0.0.0.0 --name imgautomation_rc')
-                                    }
-                                }
-                            } else {
-                                // do something else
-                                echo "Admin has rejected the release deployment"
-                                currentBuild.result = 'SUCCESS'
-                            } 
-                        }
-
-                    // } 
-
-
-                    // dockerImage = docker.build registry + ":$BUILD_NUMBER"
-                    // docker.withRegistry( '', registryCredential ) {dockerImage.push()
-                    // prepare docker build context
-                    //associateTag nexusInstanceId: 'iae_artifact_repo', search: [[key: 'name', value: 'iae_artifact_repo']], tagName: 'iae_automation_snapshot'
-                    //archiveArtifacts allowEmptyArchive: true, artifacts: 'imgautomation', onlyIfSuccessful: true
                 }
 
+            // No need to occupy a node
+            stage("Quality Gate"){
+                withSonarQubeEnv('localhost_sonarqube') {
+                    timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
+                        def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+                        if (qg.status != 'OK') {
+                        error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
+                        else{
+                            sh "pwd;'${mvnHome}/bin/mvn' -Dintegration-tests.skip=true -Dbuild.number=${targetVersion} package"
+                            pom = readMavenPom file: 'pom.xml'
+                            // get the current development version
+                            developmentArtifactVersion = "${pom.version}-${targetVersion}"
+                            print 'Build Artifact version:'
+                            print developmentArtifactVersion
+                            // execute the unit testing and collect the reports
+                            //junit '**//*target/unit-testing-reports/TEST-*.xml'
+                            archiveArtifacts 'target*//*.jar'
+                        }
+                    }
+                }
+            }
+
+            // stage("Publishing Unit Testing Metris to Confluence")
+            // {
+            //     withSonarQubeEnv('localhost_sonarqube') {
+                    
+            //     }
+
+            // }
 
 
+        stage("Stop, Deploy and Restart"){
+            echo "Build package is ready to deploy"
+            // shutdown
+            //sh 'curl -X POST http://localhost:9090/shutdown || true'
+            // copy file to target location, and start the application
+        // sh 'cp target/*.jar /Users/dineshganesan/codelab/buildrun/;' --gd
+        //withEnv(['JENKINS_NODE_COOKIE=dontkill']) {
+        //     sh 'nohup java -Dserver.port=9090 -jar /Users/dineshganesan/codelab/buildrun/*.jar &'
+        //}
+            // sh "'${mvnHome}/bin/mvn' package"
+            //dockerImage = sh "/usr/local/bin/docker build -t imgautomation ." -- gd
+            dockerImage = docker.build('services/imgautomation')
+            sh "/usr/local/bin/docker run --name dkautomation -d -p 9090:8080 services/imgautomation"
+
+            echo "Successfully launched the app"
+            // wait for application to respond
+            //sh 'while ! httping -qc1 http://localhost:8081 ; do sleep 1 ; done'
+            }
+}
+
+if (env.BRANCH_NAME == 'release')
+{
+        stage("Push Image to Repo "){
+            echo "Publishing docker image to docker registry repo"
+
+
+                docker.withRegistry('http://localhost:8090', 'nexus_access_id') {
+                    dockerImage.push('snapshot')
+                }
+
+                def userInput = true
+                def didTimeout = false
+                try {
+                    timeout(time: 60, unit: 'SECONDS') { // change to a convenient timeout for you
+                        userInput = input(
+                        ok:'Yes', message: 'Please confirm if you are satisfied with the QA results', parameters: [
+                        [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Certified']
+                        ])
+                    }
+                } catch(err) { // timeout reached or input false
+                    def user = err.getCauses()[0].getUser()
+                    if('SYSTEM' == user.toString()) { // SYSTEM means timeout.
+                        didTimeout = true
+                    } else {
+                        userInput = false
+                        echo "Aborted by: [${user}]"
+                    }
+                }
+
+                node {
+                    if (didTimeout) {
+                        // do something on timeout
+                        echo "no input was received before timeout"
+                    } else if (userInput == true) {
+                        // do something
+                        echo "Admin has approved the build and it's ready to release now"
+                        docker.withRegistry('http://localhost:8091', 'nexus_access_id') {
+
+                            stage ('Label RC'){
+                                // sh 'docker run -d -p 8080:8080 -t safe/gs-spring-boot-docker --name safe-ws'
+                                // app.push("${shortCommit}")
+                                dockerImage.push('release')
+                            }
+                        }
+                    } else {
+                        // do something else
+                        echo "Admin has rejected the release deployment"
+                        currentBuild.result = 'SUCCESS'
+                    } 
+                }
+
+            // } 
+
+
+            // dockerImage = docker.build registry + ":$BUILD_NUMBER"
+            // docker.withRegistry( '', registryCredential ) {dockerImage.push()
+            // prepare docker build context
+            //associateTag nexusInstanceId: 'iae_artifact_repo', search: [[key: 'name', value: 'iae_artifact_repo']], tagName: 'iae_automation_snapshot'
+            //archiveArtifacts allowEmptyArchive: true, artifacts: 'imgautomation', onlyIfSuccessful: true
+        }
+}
+
+    if (env.BRANCH_NAME == 'master')
+    {
+        stage ('Deploy and Launch RC'){
+
+            sh "/usr/local/bin/docker kill  imgautomation_rc || true"
+            sh "/usr/local/bin/docker rm  imgautomation_rc || true"
+            timeout(5) {
+                waitUntil {
+                    script {
+                        def result = sh script: '/usr/local/bin/docker ps -f "name=imgautomation_rc" --format "{{.ID}}"'
+                        print result
+                        return result == null;
+                    }
+                }
+            }
+
+            docker.image("localhost:8091/services/imgautomation:release").run('-p 9091:8080 -h 0.0.0.0 --name imgautomation_rc')
+        }
+        
+    }
 
 
                 // stage("Update JIRA"){

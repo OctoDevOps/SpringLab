@@ -1,6 +1,8 @@
 import java.text.SimpleDateFormat
 import java.lang.String
 
+//ver 1.8 - Added multiple branch with build trigger
+
 node {
     def shortCommit
     def pom

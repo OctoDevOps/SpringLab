@@ -187,7 +187,6 @@ if (env.BRANCH_NAME == 'release')
 
             releaseArtifactLiveName = "${pom.artifactId}_${pom.version}_rc"
             echo "Artifact Live Name ==> $releaseArtifactLiveName"
-            
 
             sh "/usr/local/bin/docker kill  $releaseArtifactLiveName || true"
             sh "/usr/local/bin/docker rm  $releaseArtifactLiveName || true"

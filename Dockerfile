@@ -11,10 +11,11 @@ VOLUME /tmp
 EXPOSE 8080
 
 # The application's jar file
-ARG JAR_FILE=target/jptAutomation-0.1.jar
+# ARG JAR_FILE=target/jptAutomation-0.1.jar
+ARG JAR_FILE=target/jptautomation-0.2.jar	
 
 # Add the application's jar to the container
-ADD ${JAR_FILE} jptAutomation.jar
+ADD ${JAR_FILE} jptautomation.jar
 
 # Run the jar file 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/jptAutomation.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/jptautomation.jar"]

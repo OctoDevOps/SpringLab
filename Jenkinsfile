@@ -99,7 +99,7 @@ if (env.BRANCH_NAME == 'develop'|| env.BRANCH_NAME == 'release' || env.BRANCH_NA
             //dockerImage = sh "/usr/local/bin/docker build -t imgautomation ." -- gd
             pom = readMavenPom file: 'pom.xml'
             // get the current development version
-            developmentArtifactVersion = "${POM_ARTIFACTID}_${pom.version}"
+            developmentArtifactVersion = "${pom.artifactId}_${pom.version}"
             echo "Artifact Name$developmentArtifactVersion"
 
             dockerImage = docker.build("services/$developmentArtifactVersion")
@@ -182,10 +182,10 @@ if (env.BRANCH_NAME == 'release')
 
             pom = readMavenPom file: 'pom.xml'
             // get the current development version
-            releaseArtifactName = "${POM_ARTIFACTID}_${pom.version}"
+            releaseArtifactName = "${pom.artifactId}_${pom.version}"
             echo "Artifact Name ... $releaseArtifactName"
 
-            releaseArtifactLiveName = "${POM_ARTIFACTID}_${pom.version}_rc"
+            releaseArtifactLiveName = "${pom.artifactId}_${pom.version}_rc"
             echo "Artifact Live Name ==> $releaseArtifactLiveName"
             
 

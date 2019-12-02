@@ -1,5 +1,5 @@
 spring:
       application:
-      name: jptAutomation
+      name: jptautomation
 server:
       port: 9090

@@ -97,8 +97,16 @@ if (env.BRANCH_NAME == 'develop'|| env.BRANCH_NAME == 'release' || env.BRANCH_NA
         //}
             // sh "'${mvnHome}/bin/mvn' package"
             //dockerImage = sh "/usr/local/bin/docker build -t imgautomation ." -- gd
-            dockerImage = docker.build('services/imgautomation')
-            sh "/usr/local/bin/docker run --name dkautomation -d -p 9090:8080 services/imgautomation"
+            pom = readMavenPom file: 'pom.xml'
+            // get the current development version
+            developmentArtifactVersion = "$POM_ARTIFACTID_${pom.version}"
+            echo "Artifact Name$developmentArtifactVersion"
+
+            dockerImage = docker.build("services/$developmentArtifactVersion")
+            sh "/usr/local/bin/docker run --name dkautomation -d -p 9090:8080 services/$developmentArtifactVersion"
+
+            //dockerImage = docker.build('services/imgautomation') -- gd
+           // sh "/usr/local/bin/docker run --name dkautomation -d -p 9090:8080 services/imgautomation" -- gd
 
             echo "Successfully launched the app"
             // wait for application to respond
@@ -172,19 +180,29 @@ if (env.BRANCH_NAME == 'release')
     {
         stage ('Deploy and Launch RC'){
 
-            sh "/usr/local/bin/docker kill  imgautomation_rc || true"
-            sh "/usr/local/bin/docker rm  imgautomation_rc || true"
+            pom = readMavenPom file: 'pom.xml'
+            // get the current development version
+            releaseArtifactName = "$POM_ARTIFACTID_${pom.version}"
+            echo "Artifact Name ... $releaseArtifactName"
+
+            releaseArtifactLiveName = "$POM_ARTIFACTID_${pom.version}_rc"
+            echo "Artifact Live Name ==> $releaseArtifactLiveName"
+            
+
+            sh "/usr/local/bin/docker kill  $releaseArtifactLiveName || true"
+            sh "/usr/local/bin/docker rm  $releaseArtifactLiveName || true"
             timeout(5) {
                 waitUntil {
                     script {
-                        def result = sh script: '/usr/local/bin/docker ps -f "name=imgautomation_rc" --format "{{.ID}}"'
+                        def result = sh script: '/usr/local/bin/docker ps -f "name=$releaseArtifactVersion" --format "{{.ID}}"'
                         print result
                         return result == null;
                     }
                 }
             }
 
-            docker.image("localhost:8091/services/imgautomation:release").run('-p 9091:8080 -h 0.0.0.0 --name imgautomation_rc')
+            //docker.image("localhost:8091/services/imgautomation:release").run('-p 9091:8080 -h 0.0.0.0 --name imgautomation_rc')
+            docker.image("localhost:8091/services/releaseArtifactName:release").run('-p 9091:8080 -h 0.0.0.0 --name releaseArtifactLiveName')
         }
         
     }

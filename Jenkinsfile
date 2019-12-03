@@ -101,7 +101,8 @@ if (env.BRANCH_NAME == 'develop'|| env.BRANCH_NAME == 'release' || env.BRANCH_NA
             developmentArtifactVersion = "${pom.artifactId}_${pom.version}"
             echo "Artifact Name ---> $developmentArtifactVersion"
 
-            dockerImage = docker.build("services/$developmentArtifactVersion")
+            //dockerImage = docker.build("services/$developmentArtifactVersion")
+            dockerImage = docker.build("services/$developmentArtifactVersion","--build-arg JARFILE=target/$developmentArtifactVersion")
             sh "/usr/local/bin/docker run --name dkautomation -d -p 9090:8080 services/$developmentArtifactVersion"
 
             //dockerImage = docker.build('services/imgautomation') -- gd

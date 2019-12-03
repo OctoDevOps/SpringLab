@@ -210,6 +210,7 @@ if (env.BRANCH_NAME == 'release')
             }
 
 
+
             //docker.image("localhost:8091/services/imgautomation:release").run('-p 9091:8080 -h 0.0.0.0 --name imgautomation_rc')
             docker.image("localhost:8091/services/${releaseArtifactName}:release").run("-p 9091:8080 -h 0.0.0.0 --name ${releaseArtifactLiveName}")
         }

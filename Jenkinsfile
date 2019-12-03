@@ -177,6 +177,14 @@ if (env.BRANCH_NAME == 'release')
 
     if (env.BRANCH_NAME == 'master')
     {
+
+        stage ("Update Env Var")  {
+                checkout scm
+                // credentialsId: 'dinesh'
+                // echo 'Checking out the files from repo...' + env.BRANCH_NAME
+                // git 'https://github.com/OctoDevOps/codelab.git'
+                 }
+
         stage ('Deploy and Launch RC'){
 
             pom = readMavenPom file: 'pom.xml'

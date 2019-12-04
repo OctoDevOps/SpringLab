@@ -8,9 +8,6 @@ import java.io.*;
 @EnableAutoConfiguration
 public class jptAutomation {
 
-		
-	public LDClient ldClient = null;
-
 	@RequestMapping("/")
 	String home() {
 		return "Welcome to JPT Release version generator..";
@@ -115,7 +112,7 @@ public class jptAutomation {
 		return "Blue";
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		SpringApplication.run(jptAutomation.class, args);
 	}
 

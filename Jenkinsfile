@@ -15,6 +15,7 @@ node {
             dockerImage = ''
         }
 
+
 if (env.BRANCH_NAME == 'develop'|| env.BRANCH_NAME == 'release' || env.BRANCH_NAME == 'dev')
 {
        //Step #1. checkout the files

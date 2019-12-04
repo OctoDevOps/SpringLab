@@ -8,6 +8,9 @@ import java.io.*;
 @EnableAutoConfiguration
 public class jptAutomation {
 
+		
+	public LDClient ldClient = null;
+
 	@RequestMapping("/")
 	String home() {
 		return "Welcome to JPT Release version generator..";
@@ -41,28 +44,35 @@ public class jptAutomation {
 	@ResponseBody
 	String getRelVersion() {
 
-		try
-		{
-			LDClient ldClient = new LDClient("sdk-838c043e-8134-4e83-bc09-c83c5c006767");
-			// //updated a new release version
-			 boolean showFeature = ldClient.boolVariation("immutable_demo", null, false);
-			if (showFeature) {
-			// application code to show the feature
-					return "IAE Release Version is : 23";
-			}
-			else {
-			// the code to run if the feature is off
-					return "23";
-			}
-            // if(ldClient != null)
-            //     ldClient.close();
+		return "IAE Release Version is : 23";
 
-		} catch(Exception ex)
-		{
-			ex.printStackTrace();
-		}
+// 		try
+// 		{
+// 			// //updated a new release version
+// 			 boolean showFeature = ldClient.boolVariation("immutable_demo", null, false);
+// 			if (showFeature) {
+// 			// application code to show the feature
+// 					return "IAE Release Version is : 23";
+// 			}
+// 			else {
+// 			// the code to run if the feature is off
+// 					return "23";
+// 			}
+// //            ldClient.close();
 
-		return null;
+// 		} catch(java.io.IOException ex)
+// 		{
+// 			throw ex;
+// 			ex.printStackTrace();
+// 		}
+// 		finally
+// 		{
+// 			ldClient.close();
+// 			return null;
+
+// 		}
+
+		// return null;
 
 	}
 
@@ -105,7 +115,7 @@ public class jptAutomation {
 		return "Blue";
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws IOException {
 		SpringApplication.run(jptAutomation.class, args);
 	}
 

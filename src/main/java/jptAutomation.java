@@ -2,6 +2,7 @@ import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.web.bind.annotation.*;
 import com.launchdarkly.client.*;
+import java.io.*;
 
 @RestController
 @EnableAutoConfiguration
@@ -40,17 +41,29 @@ public class jptAutomation {
 	@ResponseBody
 	String getRelVersion() {
 
-		LDClient ldClient = new LDClient("sdk-838c043e-8134-4e83-bc09-c83c5c006767");
-		//updated a new release version
-		boolean showFeature = ldClient.boolVariation("immutable_demo", null, false);
-		if (showFeature) {
-		// application code to show the feature
-				return "IAE Release Version is : 23";
+		try
+		{
+			LDClient ldClient = new LDClient("sdk-838c043e-8134-4e83-bc09-c83c5c006767");
+			// //updated a new release version
+			 boolean showFeature = ldClient.boolVariation("immutable_demo", null, false);
+			if (showFeature) {
+			// application code to show the feature
+					return "IAE Release Version is : 23";
+			}
+			else {
+			// the code to run if the feature is off
+					return "23";
+			}
+            // if(ldClient != null)
+            //     ldClient.close();
+
+		} catch(Exception ex)
+		{
+			ex.printStackTrace();
 		}
-		else {
-		// the code to run if the feature is off
-				return "23";
-		}
+
+		return null;
+
 	}
 
 	//IAE-2

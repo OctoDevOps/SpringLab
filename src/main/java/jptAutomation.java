@@ -38,7 +38,7 @@ public class jptAutomation {
 	@RequestMapping(value = "/rel/version", method = RequestMethod.GET)
 	@ResponseBody
 	String getRelVersion() {
-		return "IAE New Version is : 24";
+		return "IAE New Version is : 25";
 	}
 
 	//IAE-2

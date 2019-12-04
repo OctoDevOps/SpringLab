@@ -112,7 +112,7 @@ public class jptAutomation {
 		return "Blue";
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		SpringApplication.run(jptAutomation.class, args);
 	}
 

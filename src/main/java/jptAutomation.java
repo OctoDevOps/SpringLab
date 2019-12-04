@@ -1,8 +1,6 @@
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.web.bind.annotation.*;
-// import com.launchdarkly.client.*;
-// import java.io.*;
 
 @RestController
 @EnableAutoConfiguration
@@ -40,37 +38,7 @@ public class jptAutomation {
 	@RequestMapping(value = "/rel/version", method = RequestMethod.GET)
 	@ResponseBody
 	String getRelVersion() {
-
 		return "IAE Release Version is : 23";
-
-// 		try
-// 		{
-// 			// //updated a new release version
-// 			 boolean showFeature = ldClient.boolVariation("immutable_demo", null, false);
-// 			if (showFeature) {
-// 			// application code to show the feature
-// 					return "IAE Release Version is : 23";
-// 			}
-// 			else {
-// 			// the code to run if the feature is off
-// 					return "23";
-// 			}
-// //            ldClient.close();
-
-// 		} catch(java.io.IOException ex)
-// 		{
-// 			throw ex;
-// 			ex.printStackTrace();
-// 		}
-// 		finally
-// 		{
-// 			ldClient.close();
-// 			return null;
-
-// 		}
-
-		// return null;
-
 	}
 
 	//IAE-2

@@ -38,8 +38,7 @@ public class jptAutomation {
 	@RequestMapping(value = "/rel/version", method = RequestMethod.GET)
 	@ResponseBody
 	String getRelVersion() {
-		//updated a new release version
-		return "IAE Release Version is : 23";
+		return "IAE New Version is : 25";
 	}
 
 	//IAE-2
@@ -81,7 +80,7 @@ public class jptAutomation {
 		return "Blue";
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		SpringApplication.run(jptAutomation.class, args);
 	}
 

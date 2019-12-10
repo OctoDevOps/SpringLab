@@ -3,3 +3,4 @@ spring:
       name: jptautomation
 server:
       port: 9090
+      # port: 8088

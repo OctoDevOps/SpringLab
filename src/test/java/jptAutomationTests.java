@@ -33,10 +33,10 @@ public class jptAutomationTests {
 		assertNotNull(m_objAutomation.home());
 	}
 
-	@Test
-	public void test_getRel(){
-		assertNotNull(m_objAutomation.getRel(0));
-	}
+	// @Test
+	// public void test_getRel(){
+	// 	assertNotNull(m_objAutomation.getRel(0));
+	// }
 
 	@Test
 	public void test_getTeamName(){

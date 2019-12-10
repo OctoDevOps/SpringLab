@@ -56,6 +56,7 @@ public class jptAutomation {
 
 			boolean showFeature = ldClient.boolVariation("immutable-demo", user, false);
 
+
 			if (showFeature) {
 			// application code to show the feature 
 				return "Rel. 24 (The feature flag is turned ON)";

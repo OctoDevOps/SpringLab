@@ -72,7 +72,7 @@ public class jptAutomation {
 	@ResponseBody
 	String getBuildVersion() {
 		//updated a new build version
-		return "05";
+		return "09";
 	}
 
 	//IAE-3

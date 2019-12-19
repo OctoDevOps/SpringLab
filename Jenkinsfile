@@ -120,6 +120,11 @@ if (env.BRANCH_NAME == 'release')
         stage("Push Image to Repo "){
             echo "Publishing docker image to docker registry repo"
 
+            pom = readMavenPom file: 'pom.xml'
+            // get the current development version
+            developmentArtifactVersion = "${pom.version}"
+            echo "Artifact Version ---> $developmentArtifactVersion"         
+
 
                 docker.withRegistry('http://localhost:8090', 'nexus_access_id') {
                     dockerImage.push('snapshot')
@@ -156,6 +161,7 @@ if (env.BRANCH_NAME == 'release')
                             stage ('Label RC'){
                                 // sh 'docker run -d -p 8080:8080 -t safe/gs-spring-boot-docker --name safe-ws'
                                 // app.push("${shortCommit}")
+                                dockerImage.push("${developmentArtifactVersion}")
                                 dockerImage.push('release')
                             }
                         }

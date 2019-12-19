@@ -59,11 +59,11 @@ public class jptAutomation {
 
 			if (showFeature) {
 			// application code to show the feature 
-				return "Rel. 24 (The feature flag is turned ON)";
+				return "Rel. 26 (The feature flag is turned ON)";
 			}
 			else {
 			// the code to run if the feature is off
-				return "Rel. 24 (The feature flag is turned OFF)";
+				return "Rel. 25 (The feature flag is turned OFF)";
 			}
 	}
 

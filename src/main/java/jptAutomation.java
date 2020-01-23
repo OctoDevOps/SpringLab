@@ -12,9 +12,9 @@ import static java.util.Collections.singletonList;
 @EnableAutoConfiguration
 public class jptAutomation {
 
-	public static LDClient ldClient = null;
+	private static LDClient ldClient = null;
 
-	@RequestMapping("/")
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	String home() {
 		return "Welcome to JPT Release version generator..";
 	}
@@ -22,7 +22,7 @@ public class jptAutomation {
 	//IAE-0
 	@RequestMapping(value = "/rel", method = RequestMethod.GET)
 	@ResponseBody
-	String getRel(long nAppId) {
+	public String getRel(long nAppId) {
 		//updated a new release version
 		if(nAppId == 1) //Web
 			return getWebRelVersion()+"."+getBuildVersion();
@@ -32,7 +32,7 @@ public class jptAutomation {
 		return getRelVersion()+"."+getBuildVersion();	
 	}
 
-	String getWebRelVersion() {
+	private String getWebRelVersion() {
 		//updated a new build version
 		return "01";
 	}
@@ -45,7 +45,7 @@ public class jptAutomation {
 	//IAE-1
 	@RequestMapping(value = "/rel/version", method = RequestMethod.GET)
 	@ResponseBody
-	String getRelVersion() {
+	public String getRelVersion() {
 
 			//LDUser user = new LDUser("dinesh@gsa.gov");
    LDUser user = new LDUser.Builder("bob@example.com")
@@ -70,7 +70,7 @@ public class jptAutomation {
 	//IAE-2
 	@RequestMapping(value = "/rel/build", method = RequestMethod.GET)
 	@ResponseBody
-	String getBuildVersion() {
+	public String getBuildVersion() {
 		//updated a new build version
 		return "05";
 	}
@@ -78,7 +78,7 @@ public class jptAutomation {
 	//IAE-3
 	@RequestMapping(value = "/rel/patch", method = RequestMethod.GET)
 	@ResponseBody
-	String getPatchVersion() {
+	public String getPatchVersion() {
 		//updated a new patch version
 		return "08";
 	}
@@ -86,7 +86,7 @@ public class jptAutomation {
 	//IAE-3
 	@RequestMapping(value = "/rel/team", method = RequestMethod.GET)
 	@ResponseBody
-	String getTeamName(int nTeamId) {
+	publi String getTeamName(int nTeamId) {
 		//updated a new patch version
 		if(nTeamId == 1)
 			return "IT";
@@ -97,7 +97,7 @@ public class jptAutomation {
 
 	@RequestMapping(value = "/rel/colorteam", method = RequestMethod.GET)
 	@ResponseBody
-	String getColorTeamName(int nTeamId) {
+	public String getColorTeamName(int nTeamId) {
 		//updated a new patch version
 		if(nTeamId == 1)
 			return "Copper";

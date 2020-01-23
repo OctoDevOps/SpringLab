@@ -86,7 +86,7 @@ public class jptAutomation {
 	//IAE-3
 	@RequestMapping(value = "/rel/team", method = RequestMethod.GET)
 	@ResponseBody
-	publi String getTeamName(int nTeamId) {
+	public String getTeamName(int nTeamId) {
 		//updated a new patch version
 		if(nTeamId == 1)
 			return "IT";

@@ -50,7 +50,7 @@ if (env.BRANCH_NAME == 'develop'|| env.BRANCH_NAME == 'release' || env.BRANCH_NA
                     print 'target build version...'
                     print targetVersion
                     withSonarQubeEnv('localhost_sonarqube') {
-                        sh "pwd;'${mvnHome}/bin/mvn' -Dintegration-tests.skip=true -Dbuild.number=${targetVersion} clean compile test sonar:sonar"
+                        sh "pwd;'${mvnHome}/bin/mvn' -Dintegration-tests.skip=true -Dbuild.number=${targetVersion} clean compile test check sonar:sonar"
                     }
                 }
 

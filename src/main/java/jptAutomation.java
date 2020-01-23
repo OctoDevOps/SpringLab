@@ -15,7 +15,7 @@ public class jptAutomation {
 	private static LDClient ldClient = null;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	String home() {
+	public String home() {
 		return "Welcome to JPT Release version generator..";
 	}
 

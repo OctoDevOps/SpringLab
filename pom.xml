@@ -14,7 +14,9 @@
 	</parent>
 
 	<properties>
-  		 <docker.image.prefix>springio</docker.image.prefix>
+  		<docker.image.prefix>springio</docker.image.prefix>
+		<sonar.dependencyCheck.jsonReportPath>target/dependency-check-report.json</sonar.dependencyCheck.jsonReportPath>       
+	 	<sonar.dependencyCheck.htmlReportPath>target/dependency-check-report.html</sonar.dependencyCheck.htmlReportPath>
 	</properties>
 
 	<!-- Additional lines to be added here... -->

@@ -70,6 +70,7 @@ if (env.BRANCH_NAME == 'develop'|| env.BRANCH_NAME == 'release' || env.BRANCH_NA
                             developmentArtifactVersion = "${pom.version}-${targetVersion}"
                             print 'Build Artifact version:'
                             print developmentArtifactVersion
+                            notifyBuild("Unit Testing is completed for..${developmentArtifactVersion}")
                             // execute the unit testing and collect the reports
                             //junit '**//*target/unit-testing-reports/TEST-*.xml'
                             archiveArtifacts 'target*//*.jar'
@@ -111,6 +112,7 @@ if (env.BRANCH_NAME == 'develop'|| env.BRANCH_NAME == 'release' || env.BRANCH_NA
            // sh "/usr/local/bin/docker run --name dkautomation -d -p 9090:8080 services/imgautomation" -- gd
 
             echo "Successfully launched the app"
+            notifyBuild("Successfully launched the app..")
             // wait for application to respond
             //sh 'while ! httping -qc1 http://localhost:8081 ; do sleep 1 ; done'
             }

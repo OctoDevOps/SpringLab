@@ -106,6 +106,14 @@ public class jptAutomation {
 		return "Blue";
 	}
 
+
+	@RequestMapping(value = "/rel/PLNumber", method = RequestMethod.GET)
+	@ResponseBody
+	public String get() {
+		//updated a new patch version
+		return 27;
+	}
+
 	// public static void main(String[] args) {
 
 	// 	 SpringApplication.run(jptAutomation.class, args);

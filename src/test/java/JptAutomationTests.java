@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes={JptAutomation.class})
 //@ContextConfiguration(classes={jptAutomation.class})
-public class jptAutomationTests {
+public class JptAutomationTests {
 	
 	@Autowired
 	private JptAutomation  m_objAutomation;

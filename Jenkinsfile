@@ -50,7 +50,7 @@ if (env.BRANCH_NAME == 'develop'|| env.BRANCH_NAME == 'release' || env.BRANCH_NA
                     print 'target build version...'
                     print targetVersion
                     withSonarQubeEnv('localhost_sonarqube') {
-                        sh "pwd;'${mvnHome}/bin/mvn' -Dintegration-tests.skip=true -Dbuild.number=${targetVersion} clean install sonar:sonar -Dsonar.projectVersion=41 -Dsonar.projectName='jptAutomation'"
+                        sh "pwd;'${mvnHome}/bin/mvn' -Dintegration-tests.skip=true -Dbuild.number=${targetVersion} clean install sonar:sonar -Dsonar.projectVersion=41 -Dsonar.projectName='jptAutomation' -Dsonar.sources=src/main/java -Dsonar.tests=src/test/java"
                     }
                     dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
                 }

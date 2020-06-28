@@ -107,11 +107,11 @@ public class jptAutomation {
 	}
 
 	//IAE-4
-	@RequestMapping(value = "/rel/PLNumber", method = RequestMethod.GET)
+	@RequestMapping(value = "/rel/PINumber", method = RequestMethod.GET)
 	@ResponseBody
 	public String get() {
 		//updated a new patch version
-		return 27;
+		return "27";
 	}
 
 	// public static void main(String[] args) {

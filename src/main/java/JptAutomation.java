@@ -132,4 +132,9 @@ public class JptAutomation {
 
 	}
 
+	String getFrontEndRelVersion() {
+		//updated a new build version
+		return "02";
+	}
+
 }

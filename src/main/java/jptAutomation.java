@@ -7,7 +7,6 @@ import com.launchdarkly.client.*;
 import java.io.IOException;
 import static java.util.Collections.singletonList;
 
-
 @RestController
 @EnableAutoConfiguration
 public class JptAutomation {

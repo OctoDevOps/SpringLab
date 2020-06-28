@@ -33,6 +33,12 @@ public class JptAutomationTests {
 		assertNotNull(m_objAutomation.home());
 	}
 
+	@Test
+	public void test_getFrontEndRelVersion(){
+		assertNotNull(m_objAutomation.getFrontEndRelVersion());
+	}
+
+
 	// @Test
 	// public void test_getRel(){
 	// 	assertNotNull(m_objAutomation.getRel(0));

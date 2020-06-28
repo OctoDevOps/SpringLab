@@ -102,6 +102,8 @@ public class JptAutomation {
 			return "Copper";
 		if(nTeamId == 2)
 			return "Black";
+		if(nTeamId == 3)
+			return "White";
 		return "Blue";
 	}
 
@@ -132,7 +134,7 @@ public class JptAutomation {
 
 	}
 
-	String getFrontEndRelVersion() {
+	public String getFrontEndRelVersion() {
 		//updated a new build version
 		return "02";
 	}

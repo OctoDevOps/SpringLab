@@ -50,7 +50,7 @@ if (env.BRANCH_NAME == 'develop'|| env.BRANCH_NAME == 'release' || env.BRANCH_NA
                     print 'target build version...'
                     print targetVersion
                     withSonarQubeEnv('localhost_sonarqube') {
-                        sh "pwd;'${mvnHome}/bin/mvn' -X -Dintegration-tests.skip=true -Dbuild.number=${targetVersion} clean verify sonar:sonar -Dsonar.projectVersion=41  -Dsonar.sources=src/main/java  -Dsonar.coverage.jacoco.xmlReportPaths='target/site/jacoco/jacoco.xml' -Dsonar.tests=src/test/java"
+                        sh "pwd;'${mvnHome}/bin/mvn' -X -Dintegration-tests.skip=true -Dbuild.number=${targetVersion} clean verify sonar:sonar -Dsonar.projectVersion=41  -Dsonar.sources=src/main/java -Dsonar.jacoco.reportPath=target/jacoco.exec -Dsonar.tests=src/test/java"
                     }
                     dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
                 }

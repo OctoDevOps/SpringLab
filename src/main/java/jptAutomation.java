@@ -10,7 +10,7 @@ import static java.util.Collections.singletonList;
 
 @RestController
 @EnableAutoConfiguration
-public class jptAutomation {
+public class JptAutomation {
 
 	private static LDClient ldClient = null;
 

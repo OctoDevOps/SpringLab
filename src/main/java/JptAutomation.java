@@ -123,9 +123,9 @@ public class JptAutomation {
 			//ApplicationContext ctx = SpringApplication.run(jptAutomation.class, args);
 			LDClient ldClient = new LDClient("sdk-152bd4e4-5e04-439e-828b-1c8b4955d045");
 			//app.ldClient = ldClient;
-			jptAutomation.ldClient = ldClient;
+			JptAutomation.ldClient = ldClient;
 
-			SpringApplication.run(jptAutomation.class, args);
+			SpringApplication.run(JptAutomation.class, args);
 
 			//ldClient.flush();
 			//ldClient.close();

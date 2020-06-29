@@ -139,4 +139,9 @@ public class JptAutomation {
 		return "02";
 	}
 
+	public String getOctoLeadName() {
+		//updated a new build version
+		return "Taran";
+	}
+
 }

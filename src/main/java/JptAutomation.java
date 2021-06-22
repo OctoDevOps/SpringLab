@@ -53,16 +53,16 @@ public class JptAutomation {
                            .customString("groups", singletonList("beta_testers"))
                            .build();
 
-			boolean showFeature = ldClient.boolVariation("immutable-demo", user, false);
+	boolean showFeature = ldClient.boolVariation("immutable-demo", user, false);
 
 
 			if (showFeature) {
 			// application code to show the feature 
-				return "Rel. 28 (The feature flag is turned ON)";
+				return "Rel. 33 (The feature flag is turned ON)";
 			}
 			else {
 			// the code to run if the feature is off
-				return "Rel. 27 (The feature flag is turned OFF)";
+				return "Rel. 32.IP (The feature flag is turned OFF)";
 			}
 	}
 
@@ -123,7 +123,8 @@ public class JptAutomation {
 	public static void main(String[] args) throws IOException {
 
 			//ApplicationContext ctx = SpringApplication.run(jptAutomation.class, args);
-			LDClient ldClient = new LDClient("sdk-152bd4e4-5e04-439e-828b-1c8b4955d045");
+			//LDClient ldClient = new LDClient("sdk-152bd4e4-5e04-439e-828b-1c8b4955d045");
+			LDClient ldClient = new LDClient("sdk-838c043e-8134-4e83-bc09-c83c5c006767");
 			//app.ldClient = ldClient;
 			JptAutomation.ldClient = ldClient;
 
